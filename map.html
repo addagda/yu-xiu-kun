@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <iframe id="mapPage" width="500" height="500" frameborder=0
+        src="https://apis.map.qq.com/tools/locpicker?search=1&type=1&key=HGTBZ-MZHKU-NRGV4-246OU-MPLT2-5HFYY&referer=myapp">
+    </iframe>
+
+    <script>
+        window.addEventListener('message', function (event) {
+            // 接收位置信息，用户选择确认位置点后选点组件会触发该事件，回传用户的位置信息
+            var loc = event.data;
+            if (loc && loc.module == 'locationPicker') {//防止其他应用也会向该页面post信息，需判断module是否为'locationPicker'
+                console.log('location', loc);
+                //选中之后关闭弹出层
+                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                parent.layer.close(index); //再执行关闭 
+
+                parent.document.querySelector('.address').value = loc.poiaddress
+                parent.document.querySelector('.lat').value = loc.latlng.lat
+                parent.document.querySelector('.lng').value = loc.latlng.lng
+               
+            }
+        }, false);
+    </script>
+</body>
+
+</html>
